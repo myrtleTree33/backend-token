@@ -9,18 +9,22 @@ const { Schema } = mongoose;
 
 const tokenSchema = new Schema({
   appId: {
+    unique: true,
     type: String,
     required: true
   },
   appSecret: {
+    unique: true,
     type: String,
     required: true
   },
   provider: {
+    unique: true,
     type: String,
     required: true
   },
   name: {
+    unique: true,
     type: String,
     required: true
   }
