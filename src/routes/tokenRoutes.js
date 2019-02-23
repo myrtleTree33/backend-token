@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import Axios from 'axios';
+import shuffle from 'shuffle-array';
+
 import Token from '../models/Token';
 
 const routes = Router();
@@ -26,6 +28,9 @@ routes.get('/available/:provider', (req, res) => {
     try {
       const { provider } = req.params;
       const tokens = await Token.find({ provider });
+
+      // shuffle array
+      shuffle(tokens);
 
       for (let i = 0; i < tokens.length; i++) {
         const token = tokens[i];
