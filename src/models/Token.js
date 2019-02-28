@@ -8,18 +8,7 @@ let mongooseHidden = require('mongoose-hidden')();
 const { Schema } = mongoose;
 
 const tokenSchema = new Schema({
-  appId: {
-    unique: true,
-    type: String,
-    required: true
-  },
-  appSecret: {
-    unique: true,
-    type: String,
-    required: true
-  },
   provider: {
-    unique: true,
     type: String,
     required: true
   },
@@ -27,16 +16,27 @@ const tokenSchema = new Schema({
     unique: true,
     type: String,
     required: true
+  },
+  authToken: {
+    type: String
+  },
+  username: {
+    type: String
+  },
+  password: {
+    type: String
+  },
+  appId: {
+    type: String
+  },
+  appSecret: {
+    type: String
   }
 });
 
 // This will add `id` in toJSON
 tokenSchema.set('toJSON', {
   virtuals: true
-});
-
-tokenSchema.virtual('password').set(v => {
-  this.passwordHash = bcrypt.hashSync(v, 12);
 });
 
 // This will remove `_id` and `__v`

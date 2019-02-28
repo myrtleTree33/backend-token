@@ -9,6 +9,7 @@ import logger from './logger';
 
 import baseRoutes from './routes/baseRoutes';
 import tokenRoutes from './routes/tokenRoutes';
+import Token from './models/Token';
 
 // connect to Mongo DB
 logger.info(`Connecting to ${process.env.MONGO_URI}..`);

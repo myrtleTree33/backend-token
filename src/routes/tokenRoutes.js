@@ -6,19 +6,13 @@ import Token from '../models/Token';
 
 const routes = Router();
 
-function genCredentials(auth) {
-  const { id, secret } = auth;
-  return `&client_id=${id}` + `&client_secret=${secret}`;
-}
-
-async function queryGitHubRemaining(appId, appSecret) {
-  const url =
-    `https://api.github.com/rate_limit?` +
-    genCredentials({
-      id: appId,
-      secret: appSecret
-    });
-  const response = await Axios.get(url);
+async function queryGitHubRemaining(authToken) {
+  const url = 'https://api.github.com/rate_limit';
+  const response = await Axios.get(url, {
+    headers: {
+      Authorization: `token ${authToken}`
+    }
+  });
   const remaining = response.data.rate.remaining;
   return Promise.resolve(remaining);
 }
@@ -34,12 +28,13 @@ routes.get('/available/:provider', (req, res) => {
 
       for (let i = 0; i < tokens.length; i++) {
         const token = tokens[i];
-        const { appId, appSecret } = token;
-        const remaining = await queryGitHubRemaining(appId, appSecret);
+        const { authToken } = token;
+        const remaining = await queryGitHubRemaining(authToken);
         if (remaining > 50) {
           res.json({ token, remaining });
           return;
         }
+        console.log(`Exhausted ${name}..`);
       }
 
       res.json({ error: 'No available tokens!' });
