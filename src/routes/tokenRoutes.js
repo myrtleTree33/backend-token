@@ -28,13 +28,13 @@ routes.get('/available/:provider', (req, res) => {
 
       for (let i = 0; i < tokens.length; i++) {
         const token = tokens[i];
-        const { authToken } = token;
+        const { name, authToken } = token;
         const remaining = await queryGitHubRemaining(authToken);
         if (remaining > 50) {
           res.json({ token, remaining });
           return;
         }
-        console.log(`Exhausted ${name}..`);
+        console.log(`Exhausted name=${name} authToken=${authToken}..`);
       }
 
       res.json({ error: 'No available tokens!' });
